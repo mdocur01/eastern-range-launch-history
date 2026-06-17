@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eastern Range Launch Dashboard</title>
+  <title>Eastern Range Launch Dashboard • 1950–2026</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -31,7 +31,7 @@
         <span>Refresh Latest Launches</span>
       </button>
       <div id="status" class="text-xs px-4 py-2 bg-zinc-900 rounded-2xl border border-zinc-700 text-emerald-400">
-        Loading...
+        Loading data...
       </div>
     </div>
   </header>
@@ -76,7 +76,7 @@
     let data = [];
     let charts = {};
 
-    // Your exact filename
+    // Your exact CSV filename
     const CSV_URL = "https://raw.githubusercontent.com/mdocur01/eastern-range-launch-history/main/Cape%20Launch%20History%206-12-26.csv";
 
     function loadData() {
@@ -113,7 +113,7 @@
           renderAllCharts();
         },
         error: function(err) {
-          document.getElementById("status").innerHTML = `❌ Could not load CSV.<br>Check the filename is exactly "Cape Launch History 6-12-26.csv" and uploaded to the root.`;
+          document.getElementById("status").innerHTML = `❌ Could not load CSV.<br>Make sure the file is in the root and the name is exact.`;
         }
       });
     }
