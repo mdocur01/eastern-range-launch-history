@@ -109,7 +109,7 @@
             });
 
           document.getElementById("status").innerHTML = `✅ Loaded <strong>${data.length}</strong> launches`;
-          renderAllCharts();
+          setTimeout(renderAllCharts, 500); // Delay to ensure DOM is ready
         },
         error: function(err) {
           document.getElementById("status").innerHTML = `❌ Could not load CSV.`;
