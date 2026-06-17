@@ -128,8 +128,21 @@
       document.getElementById("suborbital-all").textContent = suborbitalAll;
       document.getElementById("crewed-all").textContent = crewedAll;
 
-      let total2026 = data.filter(d => d.launch_date && d.launch_date.includes("2026")).length;
+      // 2026 Totals with breakdown
+      let total2026 = 0, orbital2026 = 0, suborbital2026 = 0, crewed2026 = 0;
+      data.forEach(row => {
+        if (row.launch_date && row.launch_date.includes("2026")) {
+          total2026++;
+          if (row.mission_type === "Orbital") orbital2026++;
+          else suborbital2026++;
+          if (row.crewed === "Yes") crewed2026++;
+        }
+      });
+
       document.getElementById("total-2026").textContent = total2026;
+      document.getElementById("orbital-2026").textContent = orbital2026;
+      document.getElementById("suborbital-2026").textContent = suborbital2026;
+      document.getElementById("crewed-2026").textContent = crewed2026;
 
       // Year Chart
       const yearsData = processByYear();
