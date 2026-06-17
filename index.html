@@ -76,10 +76,11 @@
     let data = [];
     let charts = {};
 
-    const CSV_URL = "https://raw.githubusercontent.com/mdocur01/eastern-range-launch-history/main/Cape%20Launch%20History%20CSV.csv";   // ← Change this if your filename is different
+    // Your exact CSV filename on GitHub
+    const CSV_URL = "https://raw.githubusercontent.com/mdocur01/eastern-range-launch-history/main/Cape%20Launch%20History%206-12-26.csv";
 
     function loadData() {
-      document.getElementById("status").innerHTML = "Loading launch data...";
+      document.getElementById("status").innerHTML = "Loading launch data from GitHub...";
 
       Papa.parse(CSV_URL, {
         download: true,
@@ -112,7 +113,7 @@
           renderAllCharts();
         },
         error: function(err) {
-          document.getElementById("status").innerHTML = `❌ Error loading CSV. Make sure the file is named correctly and uploaded.`;
+          document.getElementById("status").innerHTML = `❌ Could not load CSV.<br>Check the filename is exactly "Cape Launch History 6-12-26.csv"`;
         }
       });
     }
@@ -133,7 +134,7 @@
       let total2026 = data.filter(d => d.launch_date && d.launch_date.includes("2026")).length;
       document.getElementById("total-2026").textContent = total2026;
 
-      // Charts would be added here (Year bar + Month line)
+      // Charts (Year and Month)
       console.log("Dashboard ready with", data.length, "launches");
     }
 
