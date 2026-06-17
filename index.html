@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eastern Range Launch Dashboard • 1950–2026</title>
+  <title>Eastern Range Launch Dashboard • 1950–Present</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -23,7 +23,7 @@
         <div class="w-9 h-9 bg-orange-500 rounded-2xl flex items-center justify-center text-white text-xl">🚀</div>
         <div>
           <h1 class="header-font text-3xl font-semibold tracking-tighter">Eastern Range Dashboard</h1>
-          <p class="text-xs text-zinc-400 -mt-1">Kennedy Space Center & Cape Canaveral • 1950–2026</p>
+          <p class="text-xs text-zinc-400 -mt-1">Kennedy Space Center & Cape Canaveral Space Force Station • 1950–Present</p>
         </div>
       </div>
       <button onclick="refreshRecentLaunches()" class="flex items-center gap-x-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
@@ -39,7 +39,7 @@
   <div class="max-w-7xl mx-auto px-8 py-8">
     <!-- Lifetime Totals -->
     <div class="bg-zinc-900 rounded-3xl p-8 border border-zinc-800 mb-8">
-      <div class="text-sm text-emerald-400 font-medium mb-4">LIFETIME TOTALS (1950–2026)</div>
+      <div class="text-sm text-emerald-400 font-medium mb-4">LIFETIME TOTALS (1950–Present)</div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
         <div><div class="text-6xl font-semibold header-font" id="total-launches">0</div><div class="text-sm text-zinc-400">Total Launches</div></div>
         <div><div class="text-5xl font-semibold header-font text-sky-400" id="orbital-all">0</div><div class="text-sm text-zinc-400">Orbital</div></div>
@@ -61,7 +61,7 @@
 
     <div class="dashboard-grid">
       <div class="bg-zinc-900 rounded-3xl p-6 border border-zinc-800 col-span-full">
-        <h2 class="text-lg font-semibold mb-4">Launches by Year (1950–2026)</h2>
+        <h2 class="text-lg font-semibold mb-4">Launches by Year (1950–Present)</h2>
         <div class="chart-container"><canvas id="yearChart"></canvas></div>
       </div>
 
@@ -109,7 +109,7 @@
             });
 
           document.getElementById("status").innerHTML = `✅ Loaded <strong>${data.length}</strong> launches`;
-          setTimeout(renderAllCharts, 500); // Delay to ensure DOM is ready
+          renderAllCharts();
         },
         error: function(err) {
           document.getElementById("status").innerHTML = `❌ Could not load CSV.`;
