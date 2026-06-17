@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eastern Range Launch Dashboard • 1950–2026</title>
+  <title>Eastern Range Launch Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -31,7 +31,7 @@
         <span>Refresh Latest Launches</span>
       </button>
       <div id="status" class="text-xs px-4 py-2 bg-zinc-900 rounded-2xl border border-zinc-700 text-emerald-400">
-        Loading data...
+        Loading...
       </div>
     </div>
   </header>
@@ -76,11 +76,11 @@
     let data = [];
     let charts = {};
 
-    // Your exact CSV filename on GitHub
+    // Your exact filename
     const CSV_URL = "https://raw.githubusercontent.com/mdocur01/eastern-range-launch-history/main/Cape%20Launch%20History%206-12-26.csv";
 
     function loadData() {
-      document.getElementById("status").innerHTML = "Loading launch data from GitHub...";
+      document.getElementById("status").innerHTML = "Loading from GitHub...";
 
       Papa.parse(CSV_URL, {
         download: true,
@@ -113,13 +113,12 @@
           renderAllCharts();
         },
         error: function(err) {
-          document.getElementById("status").innerHTML = `❌ Could not load CSV.<br>Check the filename is exactly "Cape Launch History 6-12-26.csv"`;
+          document.getElementById("status").innerHTML = `❌ Could not load CSV.<br>Check the filename is exactly "Cape Launch History 6-12-26.csv" and uploaded to the root.`;
         }
       });
     }
 
     function renderAllCharts() {
-      // Lifetime Totals
       const total = data.length;
       const orbitalAll = data.filter(d => d.mission_type === "Orbital").length;
       const suborbitalAll = data.filter(d => d.mission_type === "Suborbital").length;
@@ -130,16 +129,14 @@
       document.getElementById("suborbital-all").textContent = suborbitalAll;
       document.getElementById("crewed-all").textContent = crewedAll;
 
-      // 2026 Totals
       let total2026 = data.filter(d => d.launch_date && d.launch_date.includes("2026")).length;
       document.getElementById("total-2026").textContent = total2026;
 
-      // Charts (Year and Month)
       console.log("Dashboard ready with", data.length, "launches");
     }
 
     async function refreshRecentLaunches() {
-      document.getElementById("status").innerHTML = "Refresh feature ready";
+      document.getElementById("status").innerHTML = "Refresh ready";
     }
 
     window.onload = loadData;
