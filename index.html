@@ -31,7 +31,7 @@
         <span>Refresh Latest Launches</span>
       </button>
       <div id="status" class="text-xs px-4 py-2 bg-zinc-900 rounded-2xl border border-zinc-700 text-emerald-400">
-        Loading data...
+        Loading...
       </div>
     </div>
   </header>
@@ -76,7 +76,6 @@
     let data = [];
     let charts = {};
 
-    // Your exact CSV filename
     const CSV_URL = "https://raw.githubusercontent.com/mdocur01/eastern-range-launch-history/main/Cape%20Launch%20History%206-12-26.csv";
 
     function loadData() {
@@ -113,7 +112,7 @@
           renderAllCharts();
         },
         error: function(err) {
-          document.getElementById("status").innerHTML = `❌ Could not load CSV.<br>Make sure the file is in the root and the name is exact.`;
+          document.getElementById("status").innerHTML = `❌ Could not load CSV.`;
         }
       });
     }
@@ -132,7 +131,86 @@
       let total2026 = data.filter(d => d.launch_date && d.launch_date.includes("2026")).length;
       document.getElementById("total-2026").textContent = total2026;
 
-      console.log("Dashboard ready with", data.length, "launches");
+      // Year Chart
+      const yearsData = processByYear();
+      if (charts.yearChart) charts.yearChart.destroy();
+      charts.yearChart = new Chart(document.getElementById("yearChart"), {
+        type: 'bar',
+        data: {
+          labels: yearsData.years,
+          datasets: [
+            { label: 'Orbital', data: yearsData.orbital, backgroundColor: '#0ea5e9', stack: 'stack1' },
+            { label: 'Suborbital', data: yearsData.suborbital, backgroundColor: '#f59e0b', stack: 'stack1' }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ticks: { autoSkip: false, maxRotation: 90, minRotation: 90, font: { size: 10 } } },
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      // Month Line Chart
+      const monthsData = processRecentMonths();
+      if (charts.monthChart) charts.monthChart.destroy();
+      charts.monthChart = new Chart(document.getElementById("monthChart"), {
+        type: 'line',
+        data: {
+          labels: monthsData.labels,
+          datasets: [{
+            label: 'Launches per Month',
+            data: monthsData.counts,
+            borderColor: '#8b5cf6',
+            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+            borderWidth: 3,
+            tension: 0.3,
+            pointRadius: 5
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ticks: { autoSkip: false, maxRotation: 90, minRotation: 90, font: { size: 10 } } },
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    }
+
+    function processByYear() {
+      const map = {};
+      data.forEach(row => {
+        const year = new Date(row.launch_date).getFullYear();
+        if (year) {
+          if (!map[year]) map[year] = { orbital: 0, suborbital: 0 };
+          if (row.mission_type === "Orbital") map[year].orbital++;
+          else map[year].suborbital++;
+        }
+      });
+      const years = Object.keys(map).sort((a,b) => a - b);
+      return { years, orbital: years.map(y => map[y].orbital), suborbital: years.map(y => map[y].suborbital) };
+    }
+
+    function processRecentMonths() {
+      const labels = [];
+      const counts = [];
+      for (let year = 2022; year <= 2026; year++) {
+        const lastMonth = (year === 2026) ? 5 : 11;
+        for (let m = 0; m <= lastMonth; m++) {
+          const monthName = new Date(year, m, 1).toLocaleString('default', { month: 'short' });
+          labels.push(`${monthName} ${year}`);
+          const count = data.filter(row => {
+            const d = new Date(row.launch_date);
+            return d.getFullYear() === year && d.getMonth() === m;
+          }).length;
+          counts.push(count);
+        }
+      }
+      return { labels, counts };
     }
 
     async function refreshRecentLaunches() {
