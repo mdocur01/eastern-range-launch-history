@@ -118,80 +118,84 @@
     }
 
     function renderAllCharts() {
-      const total = data.length;
-      const orbitalAll = data.filter(d => d.mission_type === "Orbital").length;
-      const suborbitalAll = data.filter(d => d.mission_type === "Suborbital").length;
-      const crewedAll = data.filter(d => d.crewed === "Yes").length;
+      try {
+        const total = data.length;
+        const orbitalAll = data.filter(d => d.mission_type === "Orbital").length;
+        const suborbitalAll = data.filter(d => d.mission_type === "Suborbital").length;
+        const crewedAll = data.filter(d => d.crewed === "Yes").length;
 
-      document.getElementById("total-launches").textContent = total;
-      document.getElementById("orbital-all").textContent = orbitalAll;
-      document.getElementById("suborbital-all").textContent = suborbitalAll;
-      document.getElementById("crewed-all").textContent = crewedAll;
+        document.getElementById("total-launches").textContent = total;
+        document.getElementById("orbital-all").textContent = orbitalAll;
+        document.getElementById("suborbital-all").textContent = suborbitalAll;
+        document.getElementById("crewed-all").textContent = crewedAll;
 
-      // 2026 Totals with breakdown
-      let total2026 = 0, orbital2026 = 0, suborbital2026 = 0, crewed2026 = 0;
-      data.forEach(row => {
-        if (row.launch_date && row.launch_date.includes("2026")) {
-          total2026++;
-          if (row.mission_type === "Orbital") orbital2026++;
-          else suborbital2026++;
-          if (row.crewed === "Yes") crewed2026++;
-        }
-      });
-
-      document.getElementById("total-2026").textContent = total2026;
-      document.getElementById("orbital-2026").textContent = orbital2026;
-      document.getElementById("suborbital-2026").textContent = suborbital2026;
-      document.getElementById("crewed-2026").textContent = crewed2026;
-
-      // Year Chart
-      const yearsData = processByYear();
-      if (charts.yearChart) charts.yearChart.destroy();
-      charts.yearChart = new Chart(document.getElementById("yearChart"), {
-        type: 'bar',
-        data: {
-          labels: yearsData.years,
-          datasets: [
-            { label: 'Orbital', data: yearsData.orbital, backgroundColor: '#0ea5e9', stack: 'stack1' },
-            { label: 'Suborbital', data: yearsData.suborbital, backgroundColor: '#f59e0b', stack: 'stack1' }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { ticks: { autoSkip: false, maxRotation: 90, minRotation: 90, font: { size: 10 } } },
-            y: { beginAtZero: true }
+        // 2026 Totals with breakdown
+        let total2026 = 0, orbital2026 = 0, suborbital2026 = 0, crewed2026 = 0;
+        data.forEach(row => {
+          if (row.launch_date && row.launch_date.includes("2026")) {
+            total2026++;
+            if (row.mission_type === "Orbital") orbital2026++;
+            else suborbital2026++;
+            if (row.crewed === "Yes") crewed2026++;
           }
-        }
-      });
+        });
 
-      // Month Line Chart
-      const monthsData = processRecentMonths();
-      if (charts.monthChart) charts.monthChart.destroy();
-      charts.monthChart = new Chart(document.getElementById("monthChart"), {
-        type: 'line',
-        data: {
-          labels: monthsData.labels,
-          datasets: [{
-            label: 'Launches per Month',
-            data: monthsData.counts,
-            borderColor: '#8b5cf6',
-            backgroundColor: 'rgba(139, 92, 246, 0.1)',
-            borderWidth: 3,
-            tension: 0.3,
-            pointRadius: 5
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { ticks: { autoSkip: false, maxRotation: 90, minRotation: 90, font: { size: 10 } } },
-            y: { beginAtZero: true }
+        document.getElementById("total-2026").textContent = total2026;
+        document.getElementById("orbital-2026").textContent = orbital2026;
+        document.getElementById("suborbital-2026").textContent = suborbital2026;
+        document.getElementById("crewed-2026").textContent = crewed2026;
+
+        // Year Chart
+        const yearsData = processByYear();
+        if (charts.yearChart) charts.yearChart.destroy();
+        charts.yearChart = new Chart(document.getElementById("yearChart"), {
+          type: 'bar',
+          data: {
+            labels: yearsData.years,
+            datasets: [
+              { label: 'Orbital', data: yearsData.orbital, backgroundColor: '#0ea5e9', stack: 'stack1' },
+              { label: 'Suborbital', data: yearsData.suborbital, backgroundColor: '#f59e0b', stack: 'stack1' }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: { ticks: { autoSkip: false, maxRotation: 90, minRotation: 90, font: { size: 10 } } },
+              y: { beginAtZero: true }
+            }
           }
-        }
-      });
+        });
+
+        // Month Line Chart
+        const monthsData = processRecentMonths();
+        if (charts.monthChart) charts.monthChart.destroy();
+        charts.monthChart = new Chart(document.getElementById("monthChart"), {
+          type: 'line',
+          data: {
+            labels: monthsData.labels,
+            datasets: [{
+              label: 'Launches per Month',
+              data: monthsData.counts,
+              borderColor: '#8b5cf6',
+              backgroundColor: 'rgba(139, 92, 246, 0.1)',
+              borderWidth: 3,
+              tension: 0.3,
+              pointRadius: 5
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: { ticks: { autoSkip: false, maxRotation: 90, minRotation: 90, font: { size: 10 } } },
+              y: { beginAtZero: true }
+            }
+          }
+        });
+      } catch (e) {
+        console.error("Chart error:", e);
+      }
     }
 
     function processByYear() {
