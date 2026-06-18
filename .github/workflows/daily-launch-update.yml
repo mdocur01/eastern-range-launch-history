@@ -18,7 +18,7 @@ jobs:
 
       - name: Update timestamp
         run: |
-          echo "Last updated: $(date -u)" > LAST_UPDATED.txt
+          echo "Last updated: $(date -u +'%Y-%m-%d %H:%M UTC')" > LAST_UPDATED.txt
 
       - name: Commit changes
         run: |
