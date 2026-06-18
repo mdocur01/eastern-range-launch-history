@@ -1,8 +1,6 @@
 name: Daily Launch Data Update
 
 on:
-  schedule:
-    - cron: '0 9 * * *'
   workflow_dispatch:
 
 jobs:
@@ -14,13 +12,12 @@ jobs:
 
       - name: Create timestamp file
         run: |
-          echo "Last updated: $(date -u +'%Y-%m-%d %H:%M UTC')" > LAST_UPDATED.txt
-          ls -la
+          echo "Last updated: $(date -u)" > LAST_UPDATED.txt
 
-      - name: Commit changes
+      - name: Commit and push
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
           git add LAST_UPDATED.txt
-          git commit -m "Daily launch data update [automated]" || echo "No changes"
+          git commit -m "Test update"
           git push
