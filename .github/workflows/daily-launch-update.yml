@@ -12,18 +12,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch latest launches
-        run: |
-          curl -s "https://ll.thespacedevs.com/2.2/launch/?mode=detailed&limit=200&ordering=-net" > latest_launches.json
-
-      - name: Update timestamp
+      - name: Create timestamp file
         run: |
           echo "Last updated: $(date -u +'%Y-%m-%d %H:%M UTC')" > LAST_UPDATED.txt
+          ls -la
 
       - name: Commit changes
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
-          git add .
+          git add LAST_UPDATED.txt
           git commit -m "Daily launch data update [automated]" || echo "No changes"
           git push
