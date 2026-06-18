@@ -68,7 +68,7 @@
       </div>
 
       <div class="bg-zinc-900 rounded-3xl p-6 border border-zinc-800 col-span-full">
-        <h2 class="text-lg font-semibold mb-4">Launches by Month – Recent Period (2022–June 2026)</h2>
+        <h2 class="text-lg font-semibold mb-4">Launches by Month – Recent Period (2022–May 2026)</h2>
         <div class="chart-container"><canvas id="monthChart"></canvas></div>
       </div>
     </div>
@@ -168,7 +168,7 @@
         }
       });
 
-      // Month Line Chart
+      // Month Line Chart - Ends at May 2026
       const monthsData = processRecentMonths();
       if (charts.monthChart) charts.monthChart.destroy();
       charts.monthChart = new Chart(document.getElementById("monthChart"), {
@@ -214,7 +214,7 @@
       const labels = [];
       const counts = [];
       for (let year = 2022; year <= 2026; year++) {
-        const lastMonth = (year === 2026) ? 5 : 11;
+        const lastMonth = (year === 2026) ? 4 : 11; // May = 4 (0-based)
         for (let m = 0; m <= lastMonth; m++) {
           const monthName = new Date(year, m, 1).toLocaleString('default', { month: 'short' });
           labels.push(`${monthName} ${year}`);
