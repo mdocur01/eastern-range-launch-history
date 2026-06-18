@@ -1,0 +1,29 @@
+name: Update Launches Daily
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # Runs every day at 9 AM UTC
+  workflow_dispatch:     # Allows manual trigger
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch latest launches
+        run: |
+          curl -s "https://ll.thespacedevs.com/2.2/launch/?mode=detailed&limit=200&ordering=-net" > latest_launches.json
+
+      - name: Update dashboard
+        run: |
+          # Simple script to merge new data (can be enhanced)
+          echo "Data updated" > last_updated.txt
+
+      - name: Commit changes
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add .
+          git commit -m "Daily launch data update" || echo "No changes"
+          git push
