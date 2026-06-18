@@ -79,9 +79,20 @@
     let charts = {};
 
     const CSV_URL = "https://raw.githubusercontent.com/mdocur01/eastern-range-launch-history/main/Cape%20Launch%20History%206-12-26.csv";
+    const TIMESTAMP_URL = "https://raw.githubusercontent.com/mdocur01/eastern-range-launch-history/main/LAST_UPDATED.txt";
 
     function loadData() {
       document.getElementById("status").innerHTML = "Loading from GitHub...";
+
+      // Load timestamp
+      fetch(TIMESTAMP_URL)
+        .then(response => response.text())
+        .then(text => {
+          document.getElementById("last-updated").textContent = text.trim();
+        })
+        .catch(() => {
+          document.getElementById("last-updated").textContent = "Last updated: Unknown";
+        });
 
       Papa.parse(CSV_URL, {
         download: true,
@@ -214,7 +225,7 @@
       const labels = [];
       const counts = [];
       for (let year = 2022; year <= 2026; year++) {
-        const lastMonth = (year === 2026) ? 4 : 11; // May = 4 (0-based)
+        const lastMonth = (year === 2026) ? 4 : 11; // May = 4
         for (let m = 0; m <= lastMonth; m++) {
           const monthName = new Date(year, m, 1).toLocaleString('default', { month: 'short' });
           labels.push(`${monthName} ${year}`);
